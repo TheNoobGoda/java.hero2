@@ -7,14 +7,21 @@ import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 
 import java.io.IOException;
+import java.security.Key;
 
 public class Game {
     Screen screen;
+    /*
     private int x =10;
     private int y =10;
+    */
 
-    public Game() {
+    Hero hero = new Hero(10,10);
+
+    public Game() throws IOException {
+
         try {
+
             Terminal terminal = new DefaultTerminalFactory().createTerminal();
             screen = new TerminalScreen(terminal);
             screen.setCursorPosition(null);
@@ -23,6 +30,8 @@ public class Game {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
     }
 
     private void draw() throws IOException{
@@ -30,24 +39,53 @@ public class Game {
         screen.startScreen();
         screen.doResizeIfNecessary();
         screen.clear();
-        screen.setCharacter(x , y ,new TextCharacter('x'));
+        hero.draw();
         screen.refresh();
 
-        KeyStroke key = screen.readInput();
 
-        processKey(key);
 
-        if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'w'){
-            System.out.println("w is pressed");
-        }
+
+
     }
     public void run() throws IOException{
         draw();
+
+        while (true){
+            KeyStroke key = screen.readInput();
+            processKey(key);
+
+            screen.clear();
+            hero.draw();
+            screen.refresh();
+            if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'q'){
+                screen.close();
+            }
+            if (key.getKeyType() == KeyType.EOF){
+                break;
+            }
+        }
     }
 
 
 
-    private void processKey (KeyStroke key) {
+    private void processKey (KeyStroke key) throws IOException {
         System.out.println(key);
+        switch (key.getKeyType()){
+            case ArrowUp:
+                hero.moveUp();
+                break;
+            case ArrowDown:
+                hero.moveDown();
+                break;
+            case ArrowLeft:
+                hero.moveLeft();
+                break;
+            case ArrowRight:
+                hero.moveRight();
+                break;
+
+        }
     }
+
 }
+
