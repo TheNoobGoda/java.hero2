@@ -18,6 +18,7 @@ public class Arena {
     private List<Wall> walls;
     Wall wall;
     private List<Coin> coins;
+    private List<Monster> monsters;
 
 
 
@@ -27,6 +28,7 @@ public class Arena {
         this.height = height;
         this.walls = createWalls(height,width);
         this.coins = createCoins(height,width);
+        this.monsters = createMonsters(height,width);
     }
 
     public void processKey (KeyStroke key) throws IOException {
@@ -46,6 +48,7 @@ public class Arena {
                 break;
 
         }
+        moveMonsters(monsters);
     }
 
     private void moveHero (Position position){
@@ -64,6 +67,9 @@ public class Arena {
         }
         for (Coin coin : coins){
             coin.draw(graphics);
+        }
+        for (Monster monster : monsters){
+            monster.draw(graphics);
         }
     }
 
@@ -120,4 +126,19 @@ public class Arena {
         return coins;
     }
 
+    private List<Monster> createMonsters(int height, int width){
+        Random random = new Random();
+        ArrayList<Monster> monsters = new ArrayList<>();
+
+        for (int i =0;i<5;i++){
+            monsters.add(new Monster(random.nextInt(width-2)+1, random.nextInt(height-2)+1 ));
+        }
+        return monsters;
+    }
+
+    private void moveMonsters(List<Monster> monsters){
+        for (Monster monster : monsters){
+            monster.move();
+        }
+    }
 }
