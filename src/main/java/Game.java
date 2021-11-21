@@ -1,4 +1,8 @@
+import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.TextCharacter;
+import com.googlecode.lanterna.TextColor;
+import com.googlecode.lanterna.graphics.StyleSet;
+import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.Screen;
@@ -10,23 +14,25 @@ import java.io.IOException;
 import java.security.Key;
 
 public class Game {
-    Screen screen;
-    /*
-    private int x =10;
-    private int y =10;
-    */
+    private Screen screen;
+    private Arena arena;
+    private Terminal terminal;
 
-    Hero hero = new Hero(10,10);
-
-    public Game() throws IOException {
+    public Game() {
 
         try {
+            this.arena = new Arena(100,30);
+            TerminalSize terminalSize = new TerminalSize(100,30);
+            DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory().setInitialTerminalSize(terminalSize);
 
-            Terminal terminal = new DefaultTerminalFactory().createTerminal();
+            terminal = terminalFactory.createTerminal();
             screen = new TerminalScreen(terminal);
             screen.setCursorPosition(null);
+
             screen.startScreen();
             screen.doResizeIfNecessary();
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -35,28 +41,16 @@ public class Game {
     }
 
     private void draw() throws IOException{
-        screen.setCursorPosition(null);
-        screen.startScreen();
-        screen.doResizeIfNecessary();
         screen.clear();
-        hero.draw();
+        this.arena.draw(this.screen.newTextGraphics());
         screen.refresh();
-
-
-
-
-
     }
     public void run() throws IOException{
-        draw();
-
         while (true){
+            draw();
             KeyStroke key = screen.readInput();
             processKey(key);
 
-            screen.clear();
-            hero.draw();
-            screen.refresh();
             if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'q'){
                 screen.close();
             }
@@ -69,23 +63,7 @@ public class Game {
 
 
     private void processKey (KeyStroke key) throws IOException {
-        System.out.println(key);
-        switch (key.getKeyType()){
-            case ArrowUp:
-                hero.moveUp();
-                break;
-            case ArrowDown:
-                hero.moveDown();
-                break;
-            case ArrowLeft:
-                hero.moveLeft();
-                break;
-            case ArrowRight:
-                hero.moveRight();
-                break;
-
-        }
+        arena.processKey(key);
     }
-
 }
 

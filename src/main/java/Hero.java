@@ -1,4 +1,8 @@
+import com.googlecode.lanterna.SGR;
+import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.TextCharacter;
+import com.googlecode.lanterna.TextColor;
+import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.screen.TerminalScreen;
@@ -8,44 +12,37 @@ import com.googlecode.lanterna.terminal.Terminal;
 import java.io.IOException;
 
 public class Hero{
-    Screen screen;
-    private int x = 10;
-    private int y = 10;
-    public Hero(int x, int y) throws IOException {
-        Terminal terminal = new DefaultTerminalFactory().createTerminal();
-        screen = new TerminalScreen(terminal);
+
+    Position position;
+
+
+    public Hero(int x, int y) {
+        position = new Position(x,y);
     }
 
-    private int getX(){
-        return x;
+    public Position moveUp() {
+        return new Position(position.getX(), position.getY()-1);
     }
-    private int getY(){
-        return y;
+    public Position moveDown() {
+        return new Position(position.getX(), position.getY()+1);
     }
-    private void setX(int x){
-        this.x =x;
+    public Position moveLeft() {
+        return new Position(position.getX()-1, position.getY());
     }
-    private void setY(int y){
-        this.y = y;
-    }
-
-    public void moveUp(){
-        y -= 1;
-    }
-    public void moveDown(){
-        y += 1;
-    }
-    public void moveRight(){
-        x += 1;
-    }
-    public void moveLeft(){
-        x -= 1;
+    public Position moveRight() {
+        return new Position(position.getX()+1, position.getY());
     }
 
-    public void draw() throws IOException{
-        screen.startScreen();
-        screen.doResizeIfNecessary();
-        screen.setCharacter(y , x ,new TextCharacter('H'));
+    public void draw(TextGraphics graphics) {
+        graphics.setForegroundColor(TextColor.Factory.fromString("#f44336"));
+        graphics.enableModifiers(SGR.BOLD);
+        graphics.putString(new TerminalPosition(position.getX(), position.getY()),"H");
+
+        //graphics.setCharacter(position.getY(),position.getX(),new TextCharacter('H'));
+    }
+
+    public Position setPosition(Position position) {
+        return this.position = position;
     }
 
 
