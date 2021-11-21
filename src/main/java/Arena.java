@@ -9,6 +9,7 @@ import com.googlecode.lanterna.screen.Screen;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Arena {
     int height;
@@ -16,6 +17,7 @@ public class Arena {
     Hero hero ;
     private List<Wall> walls;
     Wall wall;
+    private List<Coin> coins;
 
 
 
@@ -24,7 +26,7 @@ public class Arena {
         this.width = width;
         this.height = height;
         this.walls = createWalls(height,width);
-        this.wall = new Wall(15,15);
+        this.coins = createCoins(height,width);
     }
 
     public void processKey (KeyStroke key) throws IOException {
@@ -57,9 +59,11 @@ public class Arena {
         graphics.setBackgroundColor(TextColor.Factory.fromString("#336699"));
         graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(this.width, this.height), ' ');
         this.hero.draw(graphics);
-        //this.wall.draw(graphics);
         for (Wall wall : walls){
             wall.draw(graphics);
+        }
+        for (Coin coin : coins){
+            coin.draw(graphics);
         }
     }
 
@@ -104,6 +108,16 @@ public class Arena {
             }
         }
         return true;
+    }
+
+    private List<Coin> createCoins(int height, int width){
+        Random random = new Random();
+        ArrayList<Coin> coins = new ArrayList<>();
+
+        for (int i = 0; i<5;i++){
+            coins.add(new Coin(random.nextInt(width-2)+1,random.nextInt(height-2)+1 ));
+        }
+        return coins;
     }
 
 }

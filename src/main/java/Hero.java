@@ -11,12 +11,13 @@ import com.googlecode.lanterna.terminal.Terminal;
 
 import java.io.IOException;
 
-public class Hero{
+public class Hero extends Element{
 
     Position position;
 
 
     public Hero(int x, int y) {
+        super(x,y);
         position = new Position(x,y);
     }
 
@@ -41,10 +42,9 @@ public class Hero{
         //graphics.setCharacter(position.getY(),position.getX(),new TextCharacter('H'));
     }
 
-    public Position setPosition(Position position) {
-        return this.position = position;
+    public void setPosition(Position position) {
+        this.position = position;
     }
-
 
 
 
