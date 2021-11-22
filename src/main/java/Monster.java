@@ -13,21 +13,26 @@ public class Monster extends Element{
     }
 
     public void draw(TextGraphics graphics){
-        graphics.setForegroundColor(TextColor.Factory.fromString("#38761d"));
+        graphics.setForegroundColor(TextColor.Factory.fromString("#143001"));
         graphics.putString(new TerminalPosition(position.getX(), position.getY()),"M");
     }
 
-    public void move(){
+    public Position move(){
         Random random = new Random();
+        Position pos;
         int num = random.nextInt(4);
         if (num == 0){
-            position = new Position(position.getX()+1, position.getY() );
+            pos = new Position(position.getX()+1, position.getY() );
         }else if(num == 1){
-            position = new Position(position.getX(), position.getY()+1 );
+            pos = new Position(position.getX(), position.getY()+1 );
         }else if(num ==2){
-            position = new Position(position.getX()-1, position.getY() );
+            pos = new Position(position.getX()-1, position.getY() );
         }else{
-            position = new Position(position.getX(), position.getY()-1 );
+            pos = new Position(position.getX(), position.getY()-1 );
         }
+        return pos;
+    }
+    public void setPosition(Position position){
+        this.position = position;
     }
 }

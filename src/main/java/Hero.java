@@ -38,8 +38,7 @@ public class Hero extends Element{
         graphics.setForegroundColor(TextColor.Factory.fromString("#f44336"));
         graphics.enableModifiers(SGR.BOLD);
         graphics.putString(new TerminalPosition(position.getX(), position.getY()),"H");
-
-        //graphics.setCharacter(position.getY(),position.getX(),new TextCharacter('H'));
+        graphics.disableModifiers(SGR.BOLD);
     }
 
     public void setPosition(Position position) {

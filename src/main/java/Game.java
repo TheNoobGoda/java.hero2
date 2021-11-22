@@ -51,7 +51,7 @@ public class Game {
             KeyStroke key = screen.readInput();
             processKey(key);
 
-            if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'q'){
+            if ((key.getKeyType() == KeyType.Character && key.getCharacter() == 'q') || arena.endGame()){
                 screen.close();
             }
             if (key.getKeyType() == KeyType.EOF){

@@ -1,3 +1,4 @@
+import com.googlecode.lanterna.SGR;
 import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
@@ -12,6 +13,8 @@ public class Coin extends Element {
 
     public void draw(TextGraphics graphics){
         graphics.setForegroundColor(TextColor.Factory.fromString("#f1c232"));
+        //graphics.enableModifiers(SGR.BLINK);
         graphics.putString(new TerminalPosition(position.getX(),position.getY()),"C");
+        //graphics.disableModifiers(SGR.BLINK);
     }
 }

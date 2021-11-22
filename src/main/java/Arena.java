@@ -16,14 +16,13 @@ public class Arena {
     int width;
     Hero hero ;
     private List<Wall> walls;
-    Wall wall;
     private List<Coin> coins;
     private List<Monster> monsters;
 
 
 
     public Arena(int width, int height) throws IOException {
-        hero =new Hero(10,10);
+        this.hero =new Hero(10,10);
         this.width = width;
         this.height = height;
         this.walls = createWalls(height,width);
@@ -32,7 +31,6 @@ public class Arena {
     }
 
     public void processKey (KeyStroke key) throws IOException {
-        System.out.println(key);
         switch (key.getKeyType()){
             case ArrowUp:
                 moveHero(hero.moveUp());
@@ -52,10 +50,10 @@ public class Arena {
     }
 
     private void moveHero (Position position){
-        if(canHeroMove(position)){
-            hero.setPosition(position);
+        if(canMove(position)){
+            this.hero.setPosition(position);
+            retrieveCoins(position);
         }
-
     }
 
     public void draw(TextGraphics graphics){
@@ -105,11 +103,9 @@ public class Arena {
 
     }
 
-    private boolean canHeroMove(Position position){
-        System.out.println("testing");
+    private boolean canMove(Position position){
         for (Wall wall : walls){
-            if(wall.getPosition().equals(position)){
-                System.out.println("colision");
+            if(position.getY() == wall.position.getY() && position.getX() == wall.position.getX()){
                 return false;
             }
         }
@@ -137,8 +133,49 @@ public class Arena {
     }
 
     private void moveMonsters(List<Monster> monsters){
+        Position pos;
         for (Monster monster : monsters){
-            monster.move();
+            pos =monster.move();
+            while (colisionMonsterWall(pos)){
+                pos = monster.move();
+            }
+            monster.setPosition(pos);
         }
+    }
+
+    private void retrieveCoins(Position position){
+        for (int i = 0; i<coins.size();i++){
+            if (position.getX() == coins.get(i).position.getX() && position.getY() == coins.get(i).position.getY()){
+                coins.remove(i);
+            }
+        }
+    }
+    public boolean endGame(){
+        if(coins.size() == 0){
+            System.out.println("You win");
+            return true;
+        }if (colisionMonster()){
+            return true;
+        }
+
+        return false;
+    }
+    private boolean colisionMonster(){
+        for (Monster monster : monsters){
+            if(monster.position.getY() == hero.position.getY() && monster.position.getX() == hero.position.getX()){
+                System.out.println("you lose");
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean colisionMonsterWall(Position position){
+            for (Wall wall : walls) {
+                if (wall.position.getX() == position.getX() && wall.position.getY() == position.getY()){
+                    return true;
+                }
+            }
+        return false;
     }
 }
